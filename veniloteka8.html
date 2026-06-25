@@ -1,0 +1,1861 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Винилотека — Интернет-магазин виниловых пластинок</title>
+    <style>
+        /* Базовые стили и цвета*/
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #1a1816;
+            color: #eaddc5;
+        }
+        
+        /* Шапка и Меню */
+        header {
+            background-color: #111;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 2px solid #d4a373;
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #d4a373;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        nav {
+            display: flex;
+            align-items: center;
+        }
+        nav a {
+            color: #eaddc5;
+            text-decoration: none;
+            margin-left: 25px;
+            text-transform: uppercase;
+            font-size: 14px;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+        nav a:hover {
+            color: #d4a373;
+        }
+        
+        /* Поисковик */
+        .search-box {
+            margin-left: 25px;
+        }
+        .search-box input {
+            background: #222;
+            border: 1px solid #d4a373;
+            color: #eaddc5;
+            padding: 6px 12px;
+            font-family: inherit;
+            font-size: 14px;
+            border-radius: 3px;
+            outline: none;
+            width: 220px;
+            transition: width 0.3s, box-shadow 0.3s;
+        }
+        .search-box input:focus {
+            width: 280px;
+            box-shadow: 0 0 8px rgba(212, 163, 115, 0.4);
+        }
+        .search-box input::placeholder {
+            color: #888;
+        }
+
+        /* Счетчик товаров в меню */
+        .cart-count {
+            background-color: #d4a373;
+            color: #111;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        /* Главный экран */
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background: linear-gradient(rgba(26, 24, 22, 0.8), rgba(26, 24, 22, 0.9)), url('https://images.unsplash.com/photo-1603048297172-c92544798d5e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover;
+        }
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+            color: #d4a373;
+        }
+        .hero p {
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+        }
+
+        /* Контейнер для центрирования контента */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #d4a373;
+            font-size: 32px;
+            margin-bottom: 40px;
+            border-bottom: 1px dashed #d4a373;
+            display: inline-block;
+            padding-bottom: 10px;
+            width: 100%;
+        }
+
+        /* Блок Преимущества */
+        table.advantages-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+        }
+        table.advantages-table td {
+            width: 33.33%;
+            padding: 30px;
+            border: 1px solid #333;
+            text-align: center;
+            vertical-align: top;
+            background-color: #222;
+        }
+        table.advantages-table h3 {
+            color: #d4a373;
+        }
+
+        /* Разделитель */
+        .separator {
+            background-color: #d4a373;
+            color: #111;
+            padding: 15px 0;
+            font-weight: bold;
+            font-size: 18px;
+            text-transform: uppercase;
+        }
+
+        /* Галерея */
+        .gallery {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap; 
+            justify-content: center;
+            padding-bottom: 20px;
+        }
+        .gallery-item {
+            flex: 0 0 250px;
+            background: #252525;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #333;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: border-color 0.3s, transform 0.2s, box-shadow 0.3s;
+        }
+        .gallery-item:hover {
+            border-color: #d4a373;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        }
+        .gallery-item .cover {
+            width: 100%;
+            height: 250px;
+            background-color: #111;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #eaddc5;
+            font-size: 13px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+        .gallery-item .cover::after {
+            content: 'Нажмите для подробностей';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.75);
+            color: #d4a373;
+            font-size: 10px;
+            padding: 6px;
+            font-weight: normal;
+            letter-spacing: 0;
+            text-transform: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .gallery-item:hover .cover::after {
+            opacity: 1;
+        }
+        
+        /* Обложки */
+        .cover-lana { background: linear-gradient(145deg, #1a1a2e 0%, #4a1942 50%, #8b2252 100%); }
+        .cover-tyler { background: linear-gradient(145deg, #2d1f3d 0%, #6b2d5c 50%, #c9a86c 100%); }
+        .cover-linkin { background: linear-gradient(145deg, #0d0d0d 0%, #2a2a2a 50%, #4a6741 100%); }
+        .cover-zemfira { background: linear-gradient(145deg, #1c1210 0%, #5c2e2e 50%, #8b4513 100%); }
+        .cover-beatles { background: linear-gradient(145deg, #ececec 0%, #999 50%, #333 100%); color: #111 !important; }
+        .cover-floyd { background: linear-gradient(145deg, #000 0%, #111 50%, #fff 100%); }
+        .cover-zeppelin { background: linear-gradient(145deg, #6c5436 0%, #4a3821 50%, #1a1208 100%); }
+        .cover-fleetwood { background: linear-gradient(145deg, #ded0ba 0%, #a69880 50%, #423b2f 100%); color: #111 !important; }
+        .cover-doors { background: linear-gradient(145deg, #b06221 0%, #753b0f 50%, #381a03 100%); }
+        .cover-bowie { background: linear-gradient(145deg, #ff2a00 0%, #0044ff 50%, #ffcc00 100%); }
+
+        .gallery-item .album-artist {
+            font-size: 11px;
+            color: #aaa;
+            margin-bottom: 4px;
+            font-weight: normal;
+            text-transform: none;
+        }
+        .cover-beatles .album-artist, .cover-fleetwood .album-artist {
+            color: #444;
+        }
+        
+        .price {
+            color: #d4a373;
+            font-weight: bold;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        /* Zero-блок */
+        .zero-block {
+            background: #111;
+            border: 2px dashed #d4a373;
+            padding: 50px;
+            text-align: center;
+            position: relative;
+            margin: 50px 0;
+        }
+        
+        .player-select {
+            padding: 10px;
+            background: #111;
+            color: #eaddc5;
+            border: 1px solid #d4a373;
+            font-family: inherit;
+            font-size: 14px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 350px;
+        }
+
+        .interactive-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 50px;
+            margin-top: 30px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .vinyl-record {
+            width: 120px;
+            height: 120px;
+            background: #222;
+            border-radius: 50%;
+            border: 5px solid #000;
+            cursor: grab;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d4a373;
+            font-size: 11px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.8);
+            text-align: center;
+        }
+        
+        .vinyl-record.spinning {
+            animation: spin var(--spin-duration, 1.8s) linear infinite;
+        }
+        
+        .vinyl-record.paused {
+            animation-play-state: paused;
+        }
+
+        .turntable-unit {
+            position: relative;
+            width: 200px;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tonearm {
+            position: absolute;
+            top: 10px;
+            right: 18px;
+            width: 70px;
+            height: 8px;
+            background: linear-gradient(90deg, #888, #ccc);
+            border-radius: 4px;
+            transform-origin: 95% 50%;
+            transform: rotate(-35deg);
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 5;
+            pointer-events: none;
+        }
+        .tonearm::before {
+            content: '';
+            position: absolute;
+            right: -4px;
+            top: -3px;
+            width: 14px;
+            height: 14px;
+            background: #d4a373;
+            border-radius: 50%;
+            border: 2px solid #111;
+        }
+        .tonearm::after {
+            content: '';
+            position: absolute;
+            left: -2px;
+            top: 1px;
+            width: 6px;
+            height: 6px;
+            background: #333;
+            border-radius: 1px;
+        }
+        .tonearm.playing {
+            transform: rotate(8deg);
+        }
+
+        .turntable-dropzone {
+            width: 140px;
+            height: 140px;
+            border: 2px solid #444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1a1a1a;
+            color: #666;
+            transition: all 0.3s;
+            position: relative;
+        }
+        .turntable-dropzone.hovered {
+            border-color: #d4a373;
+            background: #2a2a2a;
+        }
+        .turntable-dropzone.active {
+            border-color: #d4a373;
+            box-shadow: 0 0 25px rgba(212, 163, 115, 0.35);
+        }
+
+        .player-controls {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 60px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .volume-control {
+            text-align: center;
+        }
+        .volume-control label {
+            display: block;
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        .retro-knob-wrap {
+            position: relative;
+            width: 70px;
+            height: 70px;
+            margin: 0 auto;
+        }
+        .retro-knob-base {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, #555, #222 60%, #111);
+            border: 3px solid #444;
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.1), 0 4px 8px rgba(0,0,0,0.6);
+            position: relative;
+            cursor: grab;
+            user-select: none;
+        }
+        .retro-knob-base.dragging {
+            cursor: grabbing;
+        }
+        .retro-knob-marker {
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            width: 4px;
+            height: 14px;
+            background: #d4a373;
+            border-radius: 2px;
+            transform: translateX(-50%);
+            transform-origin: 50% 27px;
+            box-shadow: 0 0 4px rgba(212, 163, 115, 0.6);
+        }
+        .volume-value {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #d4a373;
+        }
+
+        .album-modal {
+            background: #222;
+            border: 2px solid #d4a373;
+            padding: 0;
+            width: 100%;
+            max-width: 620px;
+            box-sizing: border-box;
+            color: #eaddc5;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .album-modal-header {
+            display: flex;
+            gap: 25px;
+            padding: 30px;
+            border-bottom: 1px solid #333;
+        }
+        .album-modal-cover {
+            flex: 0 0 160px;
+            height: 160px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .album-modal-info h3 {
+            color: #d4a373;
+            margin: 0 0 8px 0;
+            font-size: 22px;
+        }
+        .album-modal-info .meta-tag {
+            display: inline-block;
+            background: #333;
+            padding: 3px 10px;
+            font-size: 11px;
+            margin: 3px 5px 3px 0;
+            border: 1px solid #444;
+        }
+        .album-modal-body {
+            padding: 25px 30px;
+        }
+        .album-modal-body p {
+            line-height: 1.6;
+            font-size: 14px;
+        }
+        .album-fact {
+            background: #1a1816;
+            border-left: 3px solid #d4a373;
+            padding: 12px 15px;
+            margin: 15px 0;
+            font-size: 13px;
+            font-style: italic;
+        }
+        .tracklist-preview {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0;
+            font-size: 13px;
+        }
+        .tracklist-preview li {
+            padding: 6px 0;
+            border-bottom: 1px dashed #333;
+            display: flex;
+            justify-content: space-between;
+        }
+        .album-modal-footer {
+            padding: 20px 30px 30px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .album-modal-footer .btn {
+            flex: 1;
+            min-width: 140px;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #d4a373;
+            color: #d4a373;
+        }
+        .btn-outline:hover {
+            background: #d4a373;
+            color: #111;
+        }
+        .player-action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+        .player-action-buttons .btn {
+            width: auto;
+            margin: 0;
+        }
+
+        /* Команда и Этапы */
+        .flex-row {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .flex-col {
+            flex: 1;
+            background: #222;
+            padding: 20px;
+            border: 1px solid #333;
+        }
+
+        /* Поля форм в модальных окнах */
+        .cart-modal input, .cart-modal select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            background: #111;
+            border: 1px solid #444;
+            color: #eaddc5;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+        .password-field {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .password-field input {
+            margin-bottom: 0;
+            padding-right: 44px;
+        }
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: #d4a373;
+            cursor: pointer;
+            padding: 6px;
+            line-height: 0;
+            opacity: 0.75;
+            transition: opacity 0.2s, color 0.2s;
+        }
+        .password-toggle:hover {
+            opacity: 1;
+            color: #e8b888;
+        }
+        .password-toggle svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .password-toggle .eye-off {
+            display: none;
+        }
+        .password-toggle.visible .eye-on {
+            display: none;
+        }
+        .password-toggle.visible .eye-off {
+            display: block;
+        }
+        .btn {
+            background-color: #d4a373;
+            color: #111;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            text-transform: uppercase;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background-color: #e8b888;
+        }
+        
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        /* Подвал и Контакты */
+        footer {
+            background-color: #111;
+            padding: 50px 20px;
+            border-top: 2px solid #333;
+        }
+        .footer-grid {
+            display: flex;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 40px;
+        }
+        .contact-info, .map-container {
+            flex: 1;
+        }
+        .social-btn {
+            display: inline-block;
+            margin-top: 15px;
+            margin-right: 15px;
+            padding: 10px 20px;
+            border: 1px solid #d4a373;
+            color: #d4a373;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .social-btn:hover {
+            background: #d4a373;
+            color: #111;
+        }
+        iframe {
+            width: 100%;
+            height: 250px;
+            border: none;
+            filter: grayscale(100%) invert(90%) contrast(1.2);
+        }
+
+        /* Стили Модальных окон */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .cart-modal {
+            background: #222;
+            border: 2px solid #d4a373;
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+            box-sizing: border-box;
+            color: #eaddc5;
+        }
+        .cart-modal h3 {
+            color: #d4a373;
+            margin-top: 0;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+        .cart-items-list {
+            list-style: none;
+            padding: 0;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px dashed #333;
+        }
+        .remove-item-btn {
+            background: transparent;
+            border: 1px solid #ff6b6b;
+            color: #ff6b6b;
+            cursor: pointer;
+            padding: 2px 6px;
+            font-family: inherit;
+        }
+        .remove-item-btn:hover {
+            background: #ff6b6b;
+            color: #111;
+        }
+        .cart-total {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: right;
+            margin-bottom: 20px;
+            color: #d4a373;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        .btn-close {
+            background-color: #444;
+            color: #fff;
+        }
+        .btn-close:hover {
+            background-color: #555;
+        }
+
+        /* Стили вкладок авторизации */
+        .auth-tabs {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+        .auth-tab {
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 14px;
+            color: #888;
+            transition: color 0.3s;
+        }
+        .auth-tab.active {
+            color: #d4a373;
+            border-bottom: 2px solid #d4a373;
+            padding-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <div class="logo">Винилотека</div>
+            <nav>
+                <a href="#about">О нас</a>
+                <a href="#gallery">Каталог</a>
+                <a href="#zero">Интерактив</a>
+                <a id="authNavBtn" onclick="openAuthModal()">Вход / Регистрация</a>
+                <a href="#contacts">Контакты</a>
+                <a onclick="openCartModal()">Корзина <span class="cart-count" id="cartCount">0</span></a>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Поиск (песня, альбом, год)..." onkeyup="searchAlbums()">
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Твори, чувствуй, живи</h1>
+        <p>Погрузись в атмосферу своих любимых песен с пластинками от Винилотеки. Винтажные издания и эксклюзивные новинки.</p>
+        <a href="#gallery" style="text-decoration: none;"><button class="btn" style="width: auto;">Смотреть каталог</button></a>
+    </section>
+
+    <marquee class="separator" scrollamount="8">
+        СОЗДАЕМ АТМОСФЕРУ • ДЛЯ ТЕХ, КТО ЦЕНИТ ИСТИННОЕ КАЧЕСТВО ЗВУКА • БОЛЕЕ 10 000 ПЛАСТИНОК В НАЛИЧИИ • СОЗДАЕМ АТМОСФЕРУ
+    </marquee>
+
+    <div class="container">
+        
+        <div id="searchResultsBlock" style="display: none; background: #222; border: 1px dashed #d4a373; padding: 25px; margin-bottom: 40px;">
+            <h3 style="color: #d4a373; margin-top: 0; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">по вашему запросу найдено:</h3>
+            <ul id="searchResultsList" style="padding-left: 0; list-style: none; margin: 0;"></ul>
+        </div>
+        
+        <h2 id="about">Наши преимущества</h2>
+        <table class="advantages-table">
+            <tr>
+                <td>
+                    <h3>Уникальная коллекция</h3>
+                    <p>Специально к сезону мы собрали редкие джазовые пластинки и винтажные издания рок-групп 60-70-х годов.</p>
+                </td>
+                <td>
+                    <h3>Качество звука</h3>
+                    <p>Все экземпляры проходят тщательную проверку. Мы гарантируем идеальное состояние каждой пластинки.</p>
+                </td>
+                <td>
+                    <h3>Надежная доставка</h3>
+                    <p>Оформление и оплата займут пару минут, а бережная упаковка сохранит винил в безопасности.</p>
+                </td>
+            </tr>
+        </table>
+
+        <h2 id="gallery">Каталог / Бестселлеры</h2>
+        <div class="gallery" id="bestsellersGallery">
+            <div class="gallery-item" data-id="lana" onclick="openAlbumModal('lana')">
+                <div class="cover cover-lana">
+                    <span class="album-artist">Lana Del Rey</span>
+                    BORN TO DIE
+                </div>
+                <div>BORN TO DIE [2LP]</div>
+                <div class="price">3999 ₽</div>
+                <button class="btn btn-small" onclick="event.stopPropagation(); addToCart('Lana Del Rey - BORN TO DIE [2LP]', 3999)">В корзину</button>
+            </div>
+            <div class="gallery-item" data-id="tyler" onclick="openAlbumModal('tyler')">
+                <div class="cover cover-tyler">
+                    <span class="album-artist">Tyler, The Creator</span>
+                    IGOR
+                </div>
+                <div>IGOR [LP]</div>
+                <div class="price">3999 ₽</div>
+                <button class="btn btn-small" onclick="event.stopPropagation(); addToCart('Tyler, The Creator - IGOR [LP]', 3999)">В корзину</button>
+            </div>
+            <div class="gallery-item" data-id="linkin" onclick="openAlbumModal('linkin')">
+                <div class="cover cover-linkin">
+                    <span class="album-artist">Linkin Park</span>
+                    HYBRID THEORY
+                </div>
+                <div>HYBRID THEORY [LP]</div>
+                <div class="price">3999 ₽</div>
+                <button class="btn btn-small" onclick="event.stopPropagation(); addToCart('Linkin Park - HYBRID THEORY [LP]', 3999)">В корзину</button>
+            </div>
+            <div class="gallery-item" data-id="zemfira" onclick="openAlbumModal('zemfira')">
+                <div class="cover cover-zemfira">
+                    <span class="album-artist">Земфира</span>
+                    ВЕНДЕТТА
+                </div>
+                <div>ВЕНДЕТТА [LP]</div>
+                <div class="price">4500 ₽</div>
+                <button class="btn btn-small" onclick="event.stopPropagation(); addToCart('Земфира - ВЕНДЕТТА [LP]', 4500)">В корзину</button>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 10px; margin-bottom: 30px;">
+            <button id="showFullCatalogBtn" class="btn btn-outline" style="width: auto; padding: 10px 30px; font-size: 14px; background: transparent; border: 2px solid #d4a373; color: #d4a373; text-transform: uppercase; cursor: pointer; transition: 0.3s;" onmouseover="this.style.background='#d4a373'; this.style.color='#111';" onmouseout="this.style.background='transparent'; this.style.color='#d4a373';">Больше пластинок</button>
+        </div>
+
+        <div id="fullCatalogContainer" style="display: none; margin-bottom: 40px;">
+            <h2 style="width: 100%;">Полный каталог</h2>
+            <div class="gallery">
+                <div class="gallery-item" data-id="lana" onclick="openAlbumModal('lana')">
+                    <div class="cover cover-lana">
+                        <span class="album-artist">Lana Del Rey</span>
+                        BORN TO DIE
+                    </div>
+                    <div>BORN TO DIE [2LP]</div>
+                    <div class="price">3999 ₽</div>
+                    <button class="btn btn-small" onclick="event.stopPropagation(); addToCart('Lana Del Rey - BORN TO DIE [2LP]', 3999)">В корзину</button>
+                </div>
+                <div class="gallery-item" data-id="tyler" onclick="openAlbumModal('tyler')">
+                    <div class="cover cover-tyler">
+                        <span class="album-artist">Tyler, The Creator</span>
+                        IGOR
+                    </div>
+                    <div>IGOR [LP]</div>
+                    <div class="price">3999 ₽</div>
+                    <button class="btn btn-small" onclick="event.stopPropagation(); addToCart('Tyler, The Creator - IGOR [LP]', 3999)">В корзину</button>
+                </div>
+                <div class="gallery-item" data-id="linkin" onclick="openAlbumModal('linkin')">
+                    <div class="cover cover-linkin">
+                        <span class="album-artist">Linkin Park</span>
+                        HYBRID THEORY
+                    </div>
+                    <div>HYBRID THEORY [LP]</div>
+                    <div class="price">3999 ₽</div>
+                    <button class="btn btn-small" onclick="event.stopPropagation(); addToCart('Linkin Park - HYBRID THEORY [LP]', 3999)">В корзину</button>
+                </div>
+                <div class="gallery-item" data-id="zemfira" onclick="openAlbumModal('zemfira')">
+                    <div class="cover cover-zemfira">
+                        <span class="album-artist">Земфира</span>
+                        ВЕНДЕТТА
+                    </div>
+                    <div>ВЕНДЕТТА [LP]</div>
+                    <div class="price">4500 ₽</div>
+                    <button class="btn btn-small" onclick="event.stopPropagation(); addToCart('Земфира - ВЕНДЕТТА [LP]', 4500)">В корзину</button>
+                </div>
+                <div class="gallery-item" data-id="beatles" onclick="openAlbumModal('beatles')">
+                    <div class="cover cover-beatles">
+                        <span class="album-artist">The Beatles</span>
+                        ABBEY ROAD
+                    </div>
+                    <div>ABBEY ROAD [LP]</div>
+                    <div class="price">5500 ₽</div>
+                    <button class="btn btn-small" onclick="event.stopPropagation(); addToCart('The Beatles - ABBEY ROAD [LP]', 5500)">В корзину</button>
+                </div>
+                <div class="gallery-item" data-id="floyd" onclick="openAlbumModal('floyd')">
+                    <div class="cover cover-floyd">
+                        <span class="album-artist">Pink Floyd</span>
+                        DARK SIDE OF THE MOON
+                    </div>
+                    <div>DARK SIDE OF THE MOON [LP]</div>
+                    <div class="price">6200 ₽</div>
+                    <button class="btn btn-small" onclick="event.stopPropagation(); addToCart('Pink Floyd - DARK SIDE OF THE MOON [LP]', 6200)">В корзину</button>
+                </div>
+                <div class="gallery-item" data-id="zeppelin" onclick="openAlbumModal('zeppelin')">
+                    <div class="cover cover-zeppelin">
+                        <span class="album-artist">Led Zeppelin</span>
+                        LED ZEPPELIN IV
+                    </div>
+                    <div>LED ZEPPELIN IV [LP]</div>
+                    <div class="price">4800 ₽</div>
+                    <button class="btn btn-small" onclick="event.stopPropagation(); addToCart('Led Zeppelin - LED ZEPPELIN IV [LP]', 4800)">В корзину</button>
+                </div>
+                <div class="gallery-item" data-id="fleetwood" onclick="openAlbumModal('fleetwood')">
+                    <div class="cover cover-fleetwood">
+                        <span class="album-artist">Fleetwood Mac</span>
+                        RUMOURS
+                    </div>
+                    <div>RUMOURS [LP]</div>
+                    <div class="price">4200 ₽</div>
+                    <button class="btn btn-small" onclick="event.stopPropagation(); addToCart('Fleetwood Mac - RUMOURS [LP]', 4200)">В корзину</button>
+                </div>
+                <div class="gallery-item" data-id="doors" onclick="openAlbumModal('doors')">
+                    <div class="cover cover-doors">
+                        <span class="album-artist">The Doors</span>
+                        THE DOORS
+                    </div>
+                    <div>THE DOORS [LP]</div>
+                    <div class="price">5100 ₽</div>
+                    <button class="btn btn-small" onclick="event.stopPropagation(); addToCart('The Doors - THE DOORS [LP]', 5100)">В корзину</button>
+                </div>
+                <div class="gallery-item" data-id="bowie" onclick="openAlbumModal('bowie')">
+                    <div class="cover cover-bowie">
+                        <span class="album-artist">David Bowie</span>
+                        ZIGGY STARDUST
+                    </div>
+                    <div>ZIGGY STARDUST [LP]</div>
+                    <div class="price">5900 ₽</div>
+                    <button class="btn btn-small" onclick="event.stopPropagation(); addToCart('David Bowie - ZIGGY STARDUST [LP]', 5900)">В корзину</button>
+                </div>
+            </div>
+        </div>
+
+        <h2 id="zero">Zero-блок: Интерактивный плеер</h2>
+        <div class="zero-block">
+            <h3>Проверьте звук перед покупкой</h3>
+            <p>1. Выберите пластинку из каталога сайта:</p>
+            
+            <select id="trackSelect" class="player-select">
+                <option value="lana">Lana Del Rey - BORN TO DIE [2LP]</option>
+                <option value="tyler">Tyler, The Creator - IGOR [LP]</option>
+                <option value="linkin">Linkin Park - HYBRID THEORY [LP]</option>
+                <option value="zemfira">Земфира - ВЕНДЕТТА [LP]</option>
+                <option value="beatles">The Beatles - ABBEY ROAD [LP]</option>
+                <option value="floyd">Pink Floyd - DARK SIDE OF THE MOON [LP]</option>
+                <option value="zeppelin">Led Zeppelin - LED ZEPPELIN IV [LP]</option>
+                <option value="fleetwood">Fleetwood Mac - RUMOURS [LP]</option>
+                <option value="doors">The Doors - THE DOORS [LP]</option>
+                <option value="bowie">David Bowie - ZIGGY STARDUST [LP]</option>
+            </select>
+
+            <p>2. Перетащите пластинку на проигрыватель</p>
+            <div class="interactive-area" id="interactiveArea">
+                <div class="vinyl-record" draggable="true" id="vinyl">Пластинка</div>
+                <div class="turntable-unit">
+                    <div class="tonearm" id="tonearm"></div>
+                    <div class="turntable-dropzone" id="turntable">Проигрыватель</div>
+                </div>
+            </div>
+
+            <div class="player-controls" id="playerControls" style="display: none;">
+                <div class="volume-control">
+                    <label>Громкость</label>
+                    <div class="retro-knob-wrap">
+                        <div class="retro-knob-base" id="volumeKnob">
+                            <div class="retro-knob-marker" id="volumeMarker"></div>
+                        </div>
+                    </div>
+                    <div class="volume-value" id="volumeValue">70%</div>
+                </div>
+            </div>
+            
+            <div class="player-action-buttons">
+                <button id="playPauseBtn" class="btn" style="display: none;" onclick="togglePlayback()">Пауза</button>
+                <button id="removeVinylBtn" class="btn btn-outline" style="display: none;" onclick="removeVinyl()">Снять пластинку</button>
+            </div>
+            <p id="player-status" style="margin-top: 20px; color: #d4a373; height: 20px; font-weight: bold;"></p>
+            <audio id="musicPlayer" preload="auto"></audio>
+        </div>
+
+        <h2>О процессе</h2>
+        <div class="flex-row">
+            <div class="flex-col">
+                <h3 style="color:#d4a373; margin-top:0;">Команда</h3>
+                <p>Наш магазин управляется командой увлеченных коллекционеров. Мы не просто продаем музыку, мы живем ею. Каждый сотрудник — эксперт, готовый помочь вам найти тот самый редкий релиз для вашей коллекции.</p>
+            </div>
+            <div class="flex-col">
+                <h3 style="color:#d4a373; margin-top:0;">Этапы заказа</h3>
+                <ol style="padding-left: 20px;">
+                    <li>Вход или регистрация в едином окне</li>
+                    <li>Выбор пластинки в каталоге</li>
+                    <li>Оформление заказа в корзине</li>
+                    <li>Подтверждение и бережная отправка</li>
+                </ol>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal-overlay" id="albumModalOverlay" onclick="if(event.target===this) closeAlbumModal()">
+        <div class="album-modal" id="albumModalContent">
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="cartModalOverlay">
+        <div class="cart-modal">
+            <h3>Ваша корзина</h3>
+            <ul class="cart-items-list" id="cartItemsList">
+            </ul>
+            <div class="cart-total">
+                Итого: <span id="cartTotalPrice">0</span> ₽
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-close" onclick="closeCartModal()">Закрыть</button>
+                <button class="btn" onclick="submitCartOrder()">Оформить покупку</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="authModalOverlay" onclick="if(event.target===this) closeAuthModal()">
+        <div class="cart-modal" style="max-width: 450px;">
+            <div class="auth-tabs">
+                <div class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Вход</div>
+                <div class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">Регистрация</div>
+            </div>
+            
+            <div id="formLoginBlock">
+                <form onsubmit="handleLogin(event)">
+                    <label>Email / Электронная почта</label>
+                    <input type="email" id="loginEmail" required placeholder="example@mail.ru">
+                    
+                    <label>Ваш пароль</label>
+                    <input type="password" id="loginPassword" required placeholder="Введите пароль">
+                    
+                    <button type="submit" class="btn" style="margin-top: 10px;">Войти на сайт</button>
+                </form>
+            </div>
+
+            <div id="formRegisterBlock" style="display: none;">
+                <form onsubmit="handleRegistration(event)">
+                    <label>Ваше имя и фамилия</label>
+                    <input type="text" id="regName" required placeholder="Иван Иванов">
+                    
+                    <label>Способ связи (Email)</label>
+                    <input type="email" id="regEmail" required placeholder="example@mail.ru">
+                    
+                    <label>Придумайте пароль</label>
+                    <div class="password-field">
+                        <input type="password" id="regPassword" required placeholder="Задайте надежный пароль">
+                        <button type="button" class="password-toggle" id="passwordToggle" onclick="togglePasswordVisibility()" aria-label="Показать пароль" title="Показать пароль">
+                            <svg class="eye-on" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <svg class="eye-off" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"></path>
+                                <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"></path>
+                                <path d="M1 1l22 22"></path>
+                                <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <button type="submit" class="btn" style="margin-top: 10px;">Создать аккаунт</button>
+                </form>
+            </div>
+            
+            <button class="btn btn-close" style="margin-top: 15px;" onclick="closeAuthModal()">Закрыть окно</button>
+        </div>
+    </div>
+
+    <footer id="contacts">
+        <div class="footer-grid">
+            <div class="contact-info">
+                <div class="logo">Винилотека</div>
+                <p style="margin-top: 20px;">Остались вопросы? Свяжитесь с нами напрямую:</p>
+                
+                <a href="mailto:gorbovakira80@gmail.com" class="social-btn">Email: gorbovakira80@gmail.com</a>
+                <a href="https://t.me/kuzmif" target="_blank" class="social-btn">Telegram: @kuzmif</a>
+                
+                <p style="margin-top: 30px; font-size: 12px; color: #666;">
+                    © 2026 Винилотека. Все права защищены.<br>
+                    Создаем атмосферу теплого звука.
+                </p>
+            </div>
+            
+            <div class="map-container">
+                <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A9c8789d0234a984edcd0f898a9d18e59670f3f269a9b23b3c37c1d76378c8d8b&amp;source=constructor" allowfullscreen="true"></iframe>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /* === Каталог альбомов === */
+       /* === Каталог альбомов === */
+        const ALBUMS = {
+            lana: {
+                id: 'lana', title: 'BORN TO DIE', artist: 'Lana Del Rey', fullName: 'Lana Del Rey - BORN TO DIE [2LP]',
+                price: 3999, year: 2012, genre: 'Dream Pop / Baroque Pop', format: '2LP, 180 г, цветной винил',
+                condition: 'Mint (M)', coverClass: 'cover-lana', audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+                description: 'Дебютный студийный альбом, ставший культурным феноменом. Атмосферный dream pop с кинематографичным звучанием.',
+                fact: '💡 Факт от Винилотеки: наша копия — редкое переиздание на полупрозрачном красном виниле.',
+                tracks: ['Born to Die', 'Off to the Races', 'Blue Jeans', 'Video Games', 'Diet Mountain Dew'], rating: '★★★★★', stock: 'В наличии — 3 экз.'
+            },
+            tyler: {
+                id: 'tyler', title: 'IGOR', artist: 'Tyler, The Creator', fullName: 'Tyler, The Creator - IGOR [LP]',
+                price: 3999, year: 2019, genre: 'Hip Hop / Neo-Soul', format: 'LP, 180 г, розовый винил',
+                condition: 'Near Mint (NM)', coverClass: 'cover-tyler', audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+                description: 'Концептуальный альбом о любви и разбитом сердце. Плавные синтезаторы, искажённые басы и эмоциональный вокал.',
+                fact: '💡 Факт от Винилотеки: IGOR выиграл Grammy за «Лучший рэп-альбом».',
+                tracks: ['IGOR\'S THEME', 'EARFQUAKE', 'I THINK', 'EXACTLY WHAT YOU RUN FROM YOU END UP CHASING', 'A BOY IS A GUN*'], rating: '★★★★★', stock: 'В наличии — 1 экз.'
+            },
+            linkin: {
+                id: 'linkin', title: 'HYBRID THEORY', artist: 'Linkin Park', fullName: 'Linkin Park - HYBRID THEORY [LP]',
+                price: 3999, year: 2000, genre: 'Nu Metal / Alternative Rock', format: 'LP, 180 г, чёрный винил',
+                condition: 'Near Mint (NM)', coverClass: 'cover-linkin', audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+                description: 'Легендарный дебют, перевернувший мир альтернативного рока. Сочетание рэпа и тяжёлых гитар.',
+                fact: '💡 Факт от Винилотеки: Hybrid Theory — один из самых продаваемых альбомов XXI века.',
+                tracks: ['Papercut', 'One Step Closer', 'With You', 'Points of Authority', 'Crawling'], rating: '★★★★★', stock: 'В наличии — 5 экз.'
+            },
+            zemfira: {
+                id: 'zemfira', title: 'ВЕНДЕТТА', artist: 'Земфира', fullName: 'Земфира - ВЕНДЕТТА [LP]',
+                price: 4500, year: 2021, genre: 'Альтернативный рок', format: 'LP, 180 г, эксклюзивный тираж',
+                condition: 'Mint (M)', coverClass: 'cover-zemfira', audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
+                description: 'Долгожданный альбом одной из главных рок-звёзд России. Зрелое, честное и энергичное звучание.',
+                fact: '💡 Факт от Винилотеки: «Вендетта» на виниле вышла ограниченным тиражом.',
+                tracks: ['Крым', 'Абъюза', 'Кактус', 'Таблетки', 'Щ.as'], rating: '★★★★☆', stock: 'В наличии — 2 экз.'
+            },
+            beatles: {
+                id: 'beatles', title: 'ABBEY ROAD', artist: 'The Beatles', fullName: 'The Beatles - ABBEY ROAD [LP]',
+                price: 5500, year: 1969, genre: 'Classic Rock', format: 'LP, 180 г',
+                condition: 'Mint (M)', coverClass: 'cover-beatles', audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
+                description: 'Один из самых значимых и успешных альбомов в истории рок-музыки, записанный на легендарной студии Abbey Road.',
+                fact: '💡 Факт от Винилотеки: Обложка альбома стала одной из самых узнаваемых и пародируемых в мире.',
+                tracks: ['Come Together', 'Something', 'Maxwell\'s Silver Hammer', 'Oh! Darling', 'Octopus\'s Garden'], rating: '★★★★★', stock: 'В наличии — 4 экз.'
+            },
+            floyd: {
+                id: 'floyd', title: 'DARK SIDE OF THE MOON', artist: 'Pink Floyd', fullName: 'Pink Floyd - DARK SIDE OF THE MOON [LP]',
+                price: 6200, year: 1973, genre: 'Progressive Rock', format: 'LP, 180 г, Gatefold',
+                condition: 'Near Mint (NM)', coverClass: 'cover-floyd', audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
+                description: 'Концептуальная работа, исследующая природу человеческого опыта. Инновационное звучание синтезаторов и студийных эффектов.',
+                fact: '💡 Факт от Винилотеки: Альбом продержался в чарте Billboard 200 рекордные 741 неделю подряд.',
+                tracks: ['Speak to Me', 'Breathe', 'On the Run', 'Time', 'Money'], rating: '★★★★★', stock: 'В наличии — 2 экз.'
+            },
+            zeppelin: {
+                id: 'zeppelin', title: 'LED ZEPPELIN IV', artist: 'Led Zeppelin', fullName: 'Led Zeppelin - LED ZEPPELIN IV [LP]',
+                price: 4800, year: 1971, genre: 'Hard Rock', format: 'LP, 180 г',
+                condition: 'Very Good Plus (VG+)', coverClass: 'cover-zeppelin', audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
+                description: 'Безымянный четвертый альбом, содержащий культовую "Stairway to Heaven" и объединивший тяжелый рок с фолк-мотивами.',
+                fact: '💡 Факт от Винилотеки: На оригинальной обложке нет ни названия группы, ни названия альбома.',
+                tracks: ['Black Dog', 'Rock and Roll', 'The Battle of Evermore', 'Stairway to Heaven'], rating: '★★★★★', stock: 'В наличии — 1 экз.'
+            },
+            fleetwood: {
+                id: 'fleetwood', title: 'RUMOURS', artist: 'Fleetwood Mac', fullName: 'Fleetwood Mac - RUMOURS [LP]',
+                price: 4200, year: 1977, genre: 'Soft Rock', format: 'LP, 180 г',
+                condition: 'Mint (M)', coverClass: 'cover-fleetwood', audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
+                description: 'Шедевр софт-рока, рожденный в атмосфере личных драм участников группы. Идеальный баланс гармоний и мелодий.',
+                fact: '💡 Факт от Винилотеки: Один из самых продаваемых альбомов всех времен (более 40 млн копий).',
+                tracks: ['Second Hand News', 'Dreams', 'Never Going Back Again', 'Don\'t Stop', 'Go Your Own Way'], rating: '★★★★★', stock: 'В наличии — 3 экз.'
+            },
+            doors: {
+                id: 'doors', title: 'THE DOORS', artist: 'The Doors', fullName: 'The Doors - THE DOORS [LP]',
+                price: 5100, year: 1967, genre: 'Psychedelic Rock', format: 'LP, 180 г',
+                condition: 'Near Mint (NM)', coverClass: 'cover-doors', audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3',
+                description: 'Дебютный альбом, открывший миру мрачную поэзию Джима Моррисона и гипнотические органные пассажи Рэя Манзарека.',
+                fact: '💡 Факт от Винилотеки: Альбом был записан всего за шесть дней.',
+                tracks: ['Break On Through', 'Soul Kitchen', 'The Crystal Ship', 'Twentieth Century Fox', 'Light My Fire'], rating: '★★★★☆', stock: 'В наличии — 2 экз.'
+            },
+            bowie: {
+                id: 'bowie', title: 'ZIGGY STARDUST', artist: 'David Bowie', fullName: 'David Bowie - ZIGGY STARDUST [LP]',
+                price: 5900, year: 1972, genre: 'Glam Rock', format: 'LP, 180 г',
+                condition: 'Mint (M)', coverClass: 'cover-bowie', audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3',
+                description: 'Концептуальный глэм-рок шедевр о марсианском мессии. Театральность, мода и музыка слились воедино.',
+                fact: '💡 Факт от Винилотеки: Полное название альбома — "The Rise and Fall of Ziggy Stardust and the Spiders from Mars".',
+                tracks: ['Five Years', 'Soul Love', 'Moonage Daydream', 'Starman', 'It Ain\'t Easy'], rating: '★★★★★', stock: 'В наличии — 1 экз.'
+            }
+        };
+        /* === Поиск по альбомам и песням === */
+        function searchAlbums() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const resultsBlock = document.getElementById('searchResultsBlock');
+            const resultsList = document.getElementById('searchResultsList');
+            
+            if (query.length === 0) {
+                resultsBlock.style.display = 'none';
+                resultsList.innerHTML = '';
+                return;
+            }
+            
+            resultsBlock.style.display = 'block';
+            resultsList.innerHTML = '';
+            
+            let foundAny = false;
+            
+            for (let id in ALBUMS) {
+                const album = ALBUMS[id];
+                const albumMatch = album.title.toLowerCase().includes(query) || album.artist.toLowerCase().includes(query);
+                
+                // Ищем совпадения среди треков пластинки
+                const matchedTracks = album.tracks.filter(track => track.toLowerCase().includes(query));
+                
+                if (albumMatch || matchedTracks.length > 0) {
+                    foundAny = true;
+                    
+                    const li = document.createElement('li');
+                    li.style.padding = '12px 15px';
+                    li.style.borderBottom = '1px dashed #444';
+                    li.style.display = 'flex';
+                    li.style.justifyContent = 'space-between';
+                    li.style.alignItems = 'center';
+                    li.style.background = '#2a2a2a';
+                    li.style.marginBottom = '5px';
+                    
+                    let tracksText = '';
+                    if (matchedTracks.length > 0) {
+                        tracksText = `<br><span style="color: #d4a373; font-size: 12px;">Найдена песня: ${matchedTracks.join(', ')}</span>`;
+                    }
+                    
+                    li.innerHTML = `
+                        <div>
+                            <span style="font-weight: bold; color: #eaddc5;">${album.artist} — ${album.title} (${album.year} г.)</span>
+                            ${tracksText}
+                        </div>
+                        <button class="btn btn-small" style="width: auto; margin: 0;" onclick="openAlbumModal('${id}')">Посмотреть</button>
+                    `;
+                    resultsList.appendChild(li);
+                }
+            }
+            
+            if (!foundAny) {
+                resultsList.innerHTML = '<li style="padding: 10px; color: #888; text-align: center;">По вашему запросу ничего не найдено</li>';
+            }
+        }
+
+        /* === Логика кнопки "Больше пластинок" === */
+        document.getElementById('showFullCatalogBtn').addEventListener('click', function() {
+            const catalogContainer = document.getElementById('fullCatalogContainer');
+            
+            if (catalogContainer.style.display === 'none') {
+                catalogContainer.style.display = 'block';
+                this.innerText = 'Скрыть каталог';
+            } else {
+                catalogContainer.style.display = 'none';
+                this.innerText = 'Больше пластинок';
+            }
+        });
+
+        /*Логика аккаунтов*/
+        // Загружаем пользователей из локальной памяти браузера или создаем чистый массив
+        let usersDB = JSON.parse(localStorage.getItem('usersDB')) || [];
+        
+        let userIsRegistered = false; 
+        let registeredUser = null;    
+
+        // Автоматическое восстановление сохраненной сессии после обновления страницы
+        let savedSession = JSON.parse(localStorage.getItem('currentSession'));
+        if (savedSession) {
+            userIsRegistered = true;
+            registeredUser = savedSession.name;
+        }
+
+        function openAuthModal() {
+            if (userIsRegistered) {
+                let logout = confirm(`Вы авторизованы как ${registeredUser}. Хотите выйти из аккаунта?`);
+                if (logout) {
+                    userIsRegistered = false;
+                    registeredUser = null;
+                    localStorage.removeItem('currentSession'); // Удаляем сессию
+                    updateAuthUI();
+                    alert('Вы успешно вышли из профиля.');
+                }
+                return;
+            }
+            document.getElementById('authModalOverlay').style.display = 'flex';
+            switchAuthTab('login');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModalOverlay').style.display = 'none';
+        }
+
+        function switchAuthTab(tab) {
+            const tabL = document.getElementById('tabLogin');
+            const tabR = document.getElementById('tabRegister');
+            const formL = document.getElementById('formLoginBlock');
+            const formR = document.getElementById('formRegisterBlock');
+            
+            if (tab === 'login') {
+                tabL.classList.add('active');
+                tabR.classList.remove('active');
+                formL.style.display = 'block';
+                formR.style.display = 'none';
+            } else {
+                tabR.classList.add('active');
+                tabL.classList.remove('active');
+                formR.style.display = 'block';
+                formL.style.display = 'none';
+            }
+        }
+
+        // ОБРАБОТКА РЕГИСТРАЦИИ
+        function handleRegistration(event) {
+            event.preventDefault();
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim().toLowerCase();
+            const password = document.getElementById('regPassword').value;
+
+            // Проверка: зарегистрирован ли уже такой email
+            const emailExists = usersDB.some(user => user.email === email);
+            if (emailExists) {
+                alert('Пользователь с таким Email уже существует! Пожалуйста, войдите в аккаунт.');
+                switchAuthTab('login');
+                return;
+            }
+
+            // Добавляем нового аккаунт в базу данных сайта
+            const newUser = { name: name, email: email, password: password };
+            usersDB.push(newUser);
+            localStorage.setItem('usersDB', JSON.stringify(usersDB));
+
+            // Автоматически выполняем вход после регистрации
+            userIsRegistered = true;
+            registeredUser = name;
+            localStorage.setItem('currentSession', JSON.stringify(newUser));
+            
+            alert(`Поздравляем, ${name}! Аккаунт успешно создан, вход выполнен автоматически.`);
+            
+            // Очищаем инпуты
+            document.getElementById('regName').value = '';
+            document.getElementById('regEmail').value = '';
+            document.getElementById('regPassword').value = '';
+            
+            closeAuthModal();
+            updateAuthUI();
+        }
+
+        // ОБРАБОТКА ВХОДА С ПРОВЕРКОЙ ИЗ БАЗЫ
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+            const password = document.getElementById('loginPassword').value;
+
+            // Ищем пользователя в едином хранилище данных
+            const activeUser = usersDB.find(user => user.email === email && user.password === password);
+
+            if (activeUser) {
+                userIsRegistered = true;
+                registeredUser = activeUser.name;
+                localStorage.setItem('currentSession', JSON.stringify(activeUser)); // Сохраняем сессию
+                
+                alert(`С возвращением, ${registeredUser}! Вы успешно вошли на сайт.`);
+                
+                document.getElementById('loginEmail').value = '';
+                document.getElementById('loginPassword').value = '';
+                
+                closeAuthModal();
+                updateAuthUI();
+            } else {
+                alert('Неверный Email или пароль! Проверьте введенные данные или зарегистрируйте новый аккаунт.');
+            }
+        }
+
+        function updateAuthUI() {
+            if (userIsRegistered) {
+                document.getElementById('authNavBtn').innerText = `Профиль (${registeredUser})`;
+            } else {
+                document.getElementById('authNavBtn').innerText = 'Вход / Регистрация';
+            }
+        }
+
+        function togglePasswordVisibility() {
+            const input = document.getElementById('regPassword');
+            const btn = document.getElementById('passwordToggle');
+            const isHidden = input.type === 'password';
+
+            input.type = isHidden ? 'text' : 'password';
+            btn.classList.toggle('visible', isHidden);
+            btn.setAttribute('aria-label', isHidden ? 'Скрыть пароль' : 'Показать пароль');
+            btn.title = isHidden ? 'Скрыть пароль' : 'Показать пароль';
+        }
+
+        /* === Звуковые эффекты (щелчок иглы) через Web Audio === */
+        let audioCtx = null;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            return audioCtx;
+        }
+
+        function playNeedleDrop() {
+            const ctx = getAudioContext();
+            const now = ctx.currentTime;
+
+            const pop = ctx.createOscillator();
+            const popGain = ctx.createGain();
+            pop.type = 'sine';
+            pop.frequency.setValueAtTime(800, now);
+            pop.frequency.exponentialRampToValueAtTime(120, now + 0.05);
+            popGain.gain.setValueAtTime(0.3, now);
+            popGain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+            pop.connect(popGain);
+            popGain.connect(ctx.destination);
+            pop.start(now);
+            pop.stop(now + 0.08);
+
+            const hiss = ctx.createBufferSource();
+            const bufferSize = ctx.sampleRate * 0.15;
+            const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = (Math.random() * 2 - 1) * 0.08 * (1 - i / bufferSize);
+            }
+            hiss.buffer = buffer;
+            const hissGain = ctx.createGain();
+            hissGain.gain.setValueAtTime(0.15, now + 0.02);
+            hissGain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+            hiss.connect(hissGain);
+            hissGain.connect(ctx.destination);
+            hiss.start(now + 0.02);
+        }
+
+        function playNeedleLift() {
+            const ctx = getAudioContext();
+            const now = ctx.currentTime;
+
+            const click = ctx.createOscillator();
+            const clickGain = ctx.createGain();
+            click.type = 'triangle';
+            click.frequency.setValueAtTime(400, now);
+            click.frequency.exponentialRampToValueAtTime(80, now + 0.06);
+            clickGain.gain.setValueAtTime(0.2, now);
+            clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+            click.connect(clickGain);
+            clickGain.connect(ctx.destination);
+            click.start(now);
+            click.stop(now + 0.1);
+
+            const fade = ctx.createBufferSource();
+            const bufferSize = ctx.sampleRate * 0.2;
+            const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = (Math.random() * 2 - 1) * 0.05 * (1 - i / bufferSize);
+            }
+            fade.buffer = buffer;
+            const fadeGain = ctx.createGain();
+            fadeGain.gain.setValueAtTime(0.1, now);
+            fadeGain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+            fade.connect(fadeGain);
+            fadeGain.connect(ctx.destination);
+            fade.start(now);
+        }
+
+        /* === Интерактивный плеер === */
+        const vinyl = document.getElementById('vinyl');
+        const turntable = document.getElementById('turntable');
+        const tonearm = document.getElementById('tonearm');
+        const statusText = document.getElementById('player-status');
+        const trackSelect = document.getElementById('trackSelect');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const musicPlayer = document.getElementById('musicPlayer');
+        const playerControls = document.getElementById('playerControls');
+        const volumeKnob = document.getElementById('volumeKnob');
+        const volumeValue = document.getElementById('volumeValue');
+        const interactiveArea = document.getElementById('interactiveArea');
+        const removeVinylBtn = document.getElementById('removeVinylBtn');
+
+        let isPlaying = false;
+        let isDropped = false;
+        let currentVolume = 0.7;
+        let knobAngle = 0;
+
+        musicPlayer.volume = currentVolume;
+
+        function getCurrentAlbum() {
+            return ALBUMS[trackSelect.value];
+        }
+
+        function volumeToAngle(vol) {
+            return -135 + vol * 270;
+        }
+
+        function angleToVolume(deg) {
+            return Math.max(0, Math.min(1, (deg + 135) / 270));
+        }
+
+        function getPointerAngle(e) {
+            const rect = volumeKnob.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            let deg = Math.atan2(clientY - cy, clientX - cx) * (180 / Math.PI) + 90;
+            if (deg > 180) deg -= 360;
+            if (deg <= -180) deg += 360;
+            return deg;
+        }
+
+        function updateKnobVisual() {
+            volumeKnob.style.transform = `rotate(${knobAngle}deg)`;
+            volumeValue.textContent = Math.round(currentVolume * 100) + '%';
+        }
+
+        function setVolume(vol) {
+            currentVolume = Math.max(0, Math.min(1, vol));
+            musicPlayer.volume = currentVolume;
+            knobAngle = volumeToAngle(currentVolume);
+            updateKnobVisual();
+        }
+
+        setVolume(0.7);
+
+        let knobDragging = false;
+        let lastPointerAngle = 0;
+
+        function startKnobDrag(e) {
+            knobDragging = true;
+            lastPointerAngle = getPointerAngle(e);
+            volumeKnob.classList.add('dragging');
+            e.preventDefault();
+        }
+
+        function moveKnobDrag(e) {
+            if (!knobDragging) return;
+            const angle = getPointerAngle(e);
+            let delta = angle - lastPointerAngle;
+            if (delta > 180) delta -= 360;
+            if (delta < -180) delta += 360;
+            setVolume(currentVolume + delta / 270);
+            lastPointerAngle = angle;
+        }
+
+        function endKnobDrag() {
+            knobDragging = false;
+            volumeKnob.classList.remove('dragging');
+        }
+
+        volumeKnob.addEventListener('mousedown', startKnobDrag);
+        document.addEventListener('mousemove', moveKnobDrag);
+        document.addEventListener('mouseup', endKnobDrag);
+
+        volumeKnob.addEventListener('touchstart', startKnobDrag, { passive: false });
+        document.addEventListener('touchmove', moveKnobDrag, { passive: false });
+        document.addEventListener('touchend', endKnobDrag);
+
+        volumeKnob.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            setVolume(currentVolume + (e.deltaY < 0 ? 0.04 : -0.04));
+        });
+
+        vinyl.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text/plain', 'vinyl');
+            setTimeout(() => { vinyl.style.opacity = '0.5'; }, 0);
+        });
+
+        vinyl.addEventListener('dragend', () => {
+            vinyl.style.opacity = '1';
+        });
+
+        turntable.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            turntable.classList.add('hovered');
+        });
+
+        turntable.addEventListener('dragleave', () => {
+            turntable.classList.remove('hovered');
+        });
+
+        turntable.addEventListener('drop', (e) => {
+            e.preventDefault();
+            turntable.classList.remove('hovered');
+
+            if (!isDropped) {
+                turntable.innerHTML = '';
+                turntable.appendChild(vinyl);
+                vinyl.style.margin = '0';
+                vinyl.style.cursor = 'default';
+                vinyl.setAttribute('draggable', 'false');
+                isDropped = true;
+                playerControls.style.display = 'flex';
+                removeVinylBtn.style.display = 'inline-block';
+            }
+
+            playMusic();
+        });
+
+        function removeVinyl() {
+            if (!isDropped) return;
+
+            musicPlayer.pause();
+            musicPlayer.currentTime = 0;
+            playNeedleLift();
+            stopSpinning();
+
+            turntable.innerHTML = 'Проигрыватель';
+            interactiveArea.insertBefore(vinyl, interactiveArea.firstChild);
+
+            vinyl.style.margin = '';
+            vinyl.style.cursor = 'grab';
+            vinyl.setAttribute('draggable', 'true');
+
+            isDropped = false;
+            isPlaying = false;
+            playPauseBtn.style.display = 'none';
+            removeVinylBtn.style.display = 'none';
+            playerControls.style.display = 'none';
+            statusText.innerText = 'Пластинка снята. Можно выбрать другую и снова перетащить на проигрыватель.';
+        }
+
+        function startSpinning() {
+            vinyl.classList.add('spinning');
+            vinyl.classList.remove('paused');
+            tonearm.classList.add('playing');
+            turntable.classList.add('active');
+        }
+
+        function stopSpinning() {
+            vinyl.classList.remove('spinning', 'paused');
+            tonearm.classList.remove('playing');
+            turntable.classList.add('active');
+        }
+
+        function pauseSpinning() {
+            vinyl.classList.add('paused');
+            tonearm.classList.remove('playing');
+        }
+
+        function resumeSpinning() {
+            vinyl.classList.remove('paused');
+            tonearm.classList.add('playing');
+        }
+
+        function playMusic() {
+            const album = getCurrentAlbum();
+            getAudioContext();
+
+            if (musicPlayer.src.indexOf(album.audio) === -1) {
+                musicPlayer.src = album.audio;
+            }
+
+            musicPlayer.pause();
+            musicPlayer.currentTime = 0;
+
+            playNeedleDrop();
+
+            setTimeout(() => {
+                musicPlayer.play().catch(() => {
+                    statusText.innerText = '⚠️ Нажмите «Запустить музыку» для воспроизведения';
+                });
+            }, 250);
+
+            startSpinning();
+            statusText.innerText = `🎵 Воспроизведение: ${album.fullName}`;
+            playPauseBtn.style.display = 'inline-block';
+            removeVinylBtn.style.display = 'inline-block';
+            playPauseBtn.innerText = 'Поставить на паузу';
+            isPlaying = true;
+        }
+
+        function togglePlayback() {
+            if (!isDropped) return;
+
+            const album = getCurrentAlbum();
+
+            if (isPlaying) {
+                musicPlayer.pause();
+                pauseSpinning();
+                statusText.innerText = `⏸️ Пауза: ${album.fullName}`;
+                playPauseBtn.innerText = 'Запустить музыку';
+                isPlaying = false;
+            } else {
+                getAudioContext();
+                if (musicPlayer.ended || musicPlayer.currentTime === 0) {
+                    playNeedleDrop();
+                    setTimeout(() => musicPlayer.play(), 200);
+                } else {
+                    musicPlayer.play();
+                }
+                resumeSpinning();
+                statusText.innerText = `🎵 Воспроизведение: ${album.fullName}`;
+                playPauseBtn.innerText = 'Поставить на паузу';
+                isPlaying = true;
+            }
+        }
+
+        musicPlayer.addEventListener('ended', () => {
+            playNeedleLift();
+            stopSpinning();
+            const album = getCurrentAlbum();
+            statusText.innerText = `✓ Трек завершён: ${album.fullName}`;
+            playPauseBtn.innerText = 'Запустить снова';
+            isPlaying = false;
+        });
+
+        trackSelect.addEventListener('change', () => {
+            const album = getCurrentAlbum();
+            if (isDropped && isPlaying) {
+                playMusic();
+            } else if (isDropped && !isPlaying) {
+                musicPlayer.src = album.audio;
+                statusText.innerText = `⏸️ Пауза: ${album.fullName}`;
+            }
+        });
+
+        function listenInPlayer(albumId) {
+            closeAlbumModal();
+            trackSelect.value = albumId;
+            document.getElementById('zero').scrollIntoView({ behavior: 'smooth' });
+            if (isDropped) {
+                playMusic();
+            }
+        }
+
+        /* === Модальное окно альбома === */
+        function openAlbumModal(albumId) {
+            const album = ALBUMS[albumId];
+            if (!album) return;
+
+            const tracksHtml = album.tracks.map((t, i) =>
+                `<li><span>${i + 1}. ${t}</span><span style="color:#666">side A</span></li>`
+            ).join('');
+
+            document.getElementById('albumModalContent').innerHTML = `
+                <div class="album-modal-header">
+                    <div class="album-modal-cover ${album.coverClass}">
+                        <span class="album-artist">${album.artist}</span>
+                        ${album.title}
+                    </div>
+                    <div class="album-modal-info">
+                        <h3>${album.artist}</h3>
+                        <div style="font-size:18px; margin-bottom:10px;">${album.title}</div>
+                        <span class="meta-tag">${album.year}</span>
+                        <span class="meta-tag">${album.genre}</span>
+                        <span class="meta-tag">${album.format}</span>
+                        <span class="meta-tag">${album.condition}</span>
+                        <div style="margin-top:12px; color:#d4a373;">${album.rating}</div>
+                        <div style="margin-top:8px; font-size:13px; color:#8f8;">${album.stock}</div>
+                    </div>
+                </div>
+                <div class="album-modal-body">
+                    <p>${album.description}</p>
+                    <div class="album-fact">${album.fact}</div>
+                    <strong style="color:#d4a373;">Треклист (фрагмент):</strong>
+                    <ul class="tracklist-preview">${tracksHtml}</ul>
+                    <div style="font-size:22px; color:#d4a373; font-weight:bold;">${album.price} ₽</div>
+                </div>
+                <div class="album-modal-footer">
+                    <button class="btn btn-outline" onclick="closeAlbumModal()">Закрыть</button>
+                    <button class="btn btn-outline" onclick="listenInPlayer('${album.id}')">🎧 Послушать в плеере</button>
+                    <button class="btn" onclick="addToCart('${album.fullName}', ${album.price}); closeAlbumModal();">В корзину</button>
+                </div>
+            `;
+
+            document.getElementById('albumModalOverlay').style.display = 'flex';
+        }
+
+        function closeAlbumModal() {
+            document.getElementById('albumModalOverlay').style.display = 'none';
+        }
+
+        /* === Логика Корзины === */
+        let cart = [];
+
+        function addToCart(productName, productPrice) {
+            cart.push({
+                id: Date.now() + Math.random(),
+                name: productName,
+                price: productPrice
+            });
+            updateCartCounter();
+            alert(`«${productName}» успешно добавлен в корзину!`);
+        }
+
+        function updateCartCounter() {
+            document.getElementById('cartCount').innerText = cart.length;
+        }
+
+        function openCartModal() {
+            const modal = document.getElementById('cartModalOverlay');
+            const listContainer = document.getElementById('cartItemsList');
+            const totalPriceContainer = document.getElementById('cartTotalPrice');
+            
+            listContainer.innerHTML = '';
+            
+            if (cart.length === 0) {
+                listContainer.innerHTML = '<li style="text-align:center; padding:20px 0;">Ваша корзина пока пуста</li>';
+                totalPriceContainer.innerText = '0';
+            } else {
+                let totalSum = 0;
+                cart.forEach(item => {
+                    totalSum += item.price;
+                    
+                    const li = document.createElement('li');
+                    li.className = 'cart-item';
+                    li.innerHTML = `
+                        <span>${item.name} — <strong>${item.price} ₽</strong></span>
+                        <button class="remove-item-btn" onclick="removeFromCart(${item.id})">Удалить</button>
+                    `;
+                    listContainer.appendChild(li);
+                });
+                totalPriceContainer.innerText = totalSum;
+            }
+            
+            modal.style.display = 'flex';
+        }
+
+        function closeCartModal() {
+            document.getElementById('cartModalOverlay').style.display = 'none';
+        }
+
+        function removeFromCart(itemId) {
+            cart = cart.filter(item => item.id !== itemId);
+            updateCartCounter();
+            openCartModal();
+        }
+
+        function submitCartOrder() {
+            if (cart.length === 0) {
+                alert('Нельзя оформить заказ, так как ваша корзина пуста.');
+                return;
+            }
+            
+            if (!userIsRegistered) {
+                alert('Ошибка оформления! Для покупки товаров вам необходимо войти или зарегистрироваться на сайте.');
+                closeCartModal();
+                openAuthModal();
+                return;
+            }
+            
+            const totalSum = document.getElementById('cartTotalPrice').innerText;
+            alert(`Уважаемый(ая) ${registeredUser}, спасибо за покупку!\nВаш заказ на сумму ${totalSum} ₽ успешно сформирован.\nМенеджер свяжется с вами по указанному Email.`);
+            
+            cart = [];
+            updateCartCounter();
+            closeCartModal();
+        }
+
+        // Первичная инициализация UI при загрузке страницы (проверяем сессию)
+        updateAuthUI();
+    </script>
+</body>
+</html>
